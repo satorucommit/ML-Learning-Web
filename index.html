@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Training Journey - Step by Step Guide</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .neural-network {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .tab-active {
+            border-bottom: 3px solid #667eea;
+            color: #667eea;
+        }
+        
+        .data-point {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .scroll-indicator {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .matrix-cell {
+            transition: all 0.3s ease;
+        }
+        
+        .matrix-cell:hover {
+            transform: scale(1.2);
+            background: #667eea;
+            color: white;
+        }
+        
+        /* Dark mode styles */
+        .dark-mode {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        
+        .dark-mode .bg-white {
+            background-color: #2d3748;
+        }
+        
+        .dark-mode .bg-gray-50 {
+            background-color: #1a202c;
+        }
+        
+        .dark-mode .text-gray-600 {
+            color: #a0aec0;
+        }
+        
+        .dark-mode .text-gray-800 {
+            color: #e2e8f0;
+        }
+        
+        .dark-mode .bg-gray-200 {
+            background-color: #4a5568;
+        }
+        
+        .dark-mode .bg-gray-800 {
+            background-color: #171923;
+        }
+        
+        .dark-mode .text-gray-400 {
+            color: #718096;
+        }
+        
+        .dark-mode .border-gray-700 {
+            border-color: #4a5568;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white shadow-md z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-brain text-purple-600 text-2xl"></i>
+                    <span class="text-xl font-bold text-gray-800">ML Training Journey</span>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#overview" class="text-gray-600 hover:text-purple-600 transition">Overview</a>
+                    <a href="#steps" class="text-gray-600 hover:text-purple-600 transition">Steps</a>
+                    <a href="#demo" class="text-gray-600 hover:text-purple-600 transition">Demo</a>
+                    <a href="#resources" class="text-gray-600 hover:text-purple-600 transition">Resources</a>
+                    <a href="#quiz" class="text-gray-600 hover:text-purple-600 transition">Quiz</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="darkModeToggle" class="text-gray-600 hover:text-purple-600">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="md:hidden" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars text-gray-600 text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-t">
+            <div class="px-6 py-4 space-y-2">
+                <a href="#overview" class="block text-gray-600 hover:text-purple-600">Overview</a>
+                <a href="#steps" class="block text-gray-600 hover:text-purple-600">Steps</a>
+                <a href="#demo" class="block text-gray-600 hover:text-purple-600">Demo</a>
+                <a href="#resources" class="block text-gray-600 hover:text-purple-600">Resources</a>
+                <a href="#quiz" class="block text-gray-600 hover:text-purple-600">Quiz</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white pt-24 pb-20">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                        Master Machine Learning Training
+                    </h1>
+                    <p class="text-xl mb-8 text-purple-100">
+                        Understand the complete ML training pipeline with interactive visualizations and step-by-step guidance.
+                    </p>
+                    <div class="flex space-x-4">
+                        <button onclick="scrollToSection('steps')" class="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition">
+                            Start Learning
+                        </button>
+                        <button onclick="scrollToSection('demo')" class="border-2 border-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition">
+                            Try Demo
+                        </button>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="neural-network">
+                        <svg width="300" height="300" viewBox="0 0 300 300">
+                            <!-- Neural Network Visualization -->
+                            <g id="neuralNet">
+                                <!-- Input Layer -->
+                                <circle cx="50" cy="75" r="15" fill="#fff" opacity="0.9"/>
+                                <circle cx="50" cy="150" r="15" fill="#fff" opacity="0.9"/>
+                                <circle cx="50" cy="225" r="15" fill="#fff" opacity="0.9"/>
+                                
+                                <!-- Hidden Layer -->
+                                <circle cx="150" cy="50" r="15" fill="#fff" opacity="0.9"/>
+                                <circle cx="150" cy="125" r="15" fill="#fff" opacity="0.9"/>
+                                <circle cx="150" cy="200" r="15" fill="#fff" opacity="0.9"/>
+                                <circle cx="150" cy="275" r="15" fill="#fff" opacity="0.9"/>
+                                
+                                <!-- Output Layer -->
+                                <circle cx="250" cy="125" r="15" fill="#fff" opacity="0.9"/>
+                                <circle cx="250" cy="200" r="15" fill="#fff" opacity="0.9"/>
+                                
+                                <!-- Connections -->
+                                <line x1="65" y1="75" x2="135" y2="50" stroke="#fff" stroke-width="1" opacity="0.3"/>
+                                <line x1="65" y1="75" x2="135" y2="125" stroke="#fff" stroke-width="1" opacity="0.3"/>
+                                <line x1="65" y1="150" x2="135" y2="125" stroke="#fff" stroke-width="1" opacity="0.3"/>
+                                <line x1="65" y1="150" x2="135" y2="200" stroke="#fff" stroke-width="1" opacity="0.3"/>
+                                <line x1="65" y1="225" x2="135" y2="200" stroke="#fff" stroke-width="1" opacity="0.3"/>
+                                <line x1="65" y1="225" x2="135" y2="275" stroke="#fff" stroke-width="1" opacity="0.3"/>
+                                
+                                <line x1="165" y1="50" x2="235" y2="125" stroke="#fff" stroke-width="1" opacity="0.3"/>
+                                <line x1="165" y1="125" x2="235" y2="125" stroke="#fff" stroke-width="1" opacity="0.3"/>
+                                <line x1="165" y1="125" x2="235" y2="200" stroke="#fff" stroke-width="1" opacity="0.3"/>
+                                <line x1="165" y1="200" x2="235" y2="200" stroke="#fff" stroke-width="1" opacity="0.3"/>
+                                <line x1="165" y1="275" x2="235" y2="200" stroke="#fff" stroke-width="1" opacity="0.3"/>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-10 scroll-indicator">
+            <i class="fas fa-chevron-down text-2xl"></i>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12">What is ML Training?</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="bg-purple-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-database text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Data Collection</h3>
+                    <p class="text-gray-600">Gathering and preparing quality datasets for training</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-purple-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-cogs text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Model Training</h3>
+                    <p class="text-gray-600">Teaching the model patterns from the data</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-purple-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-chart-line text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Evaluation</h3>
+                    <p class="text-gray-600">Testing and validating model performance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Steps Section -->
+    <section id="steps" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12">ML Training Pipeline</h2>
+            
+            <!-- Progress Bar -->
+            <div class="mb-12">
+                <div class="bg-gray-200 rounded-full h-4 overflow-hidden">
+                    <div id="progressBar" class="progress-bar bg-gradient-to-r from-purple-500 to-purple-700 h-full" style="width: 0%"></div>
+                </div>
+                <p class="text-center mt-2 text-gray-600">Progress: <span id="progressText">0%</span></p>
+            </div>
+
+            <!-- Step Cards -->
+            <div class="space-y-8">
+                <!-- Step 1 -->
+                <div class="step-card bg-white rounded-lg shadow-lg p-8 card-hover" data-step="1">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <span class="step-number text-4xl font-bold">01</span>
+                        </div>
+                        <div class="ml-6 flex-grow">
+                            <h3 class="text-2xl font-semibold mb-4">Data Collection & Preparation</h3>
+                            <p class="text-gray-600 mb-4">
+                                The foundation of any ML model is quality data. This step involves gathering relevant data, cleaning it, and preparing it for training.
+                            </p>
+                            <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                                <h4 class="font-semibold mb-2">Key Activities:</h4>
+                                <ul class="list-disc list-inside text-gray-600 space-y-1">
+                                    <li>Data sourcing and collection</li>
+                                    <li>Handling missing values</li>
+                                    <li>Feature engineering</li>
+                                    <li>Data normalization/standardization</li>
+                                </ul>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <button onclick="showCodeExample('data_prep')" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition">
+                                    <i class="fas fa-code mr-2"></i>View Code
+                                </button>
+                                <button onclick="showVisualization('data')" class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition">
+                                    <i class="fas fa-chart-bar mr-2"></i>Visualize
+                                </button>
+                                <button onclick="downloadResource('data_prep_cheatsheet.pdf')" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
+                                    <i class="fas fa-download mr-2"></i>Cheat Sheet
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step-card bg-white rounded-lg shadow-lg p-8 card-hover" data-step="2">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <span class="step-number text-4xl font-bold">02</span>
+                        </div>
+                        <div class="ml-6 flex-grow">
+                            <h3 class="text-2xl font-semibold mb-4">Data Splitting</h3>
+                            <p class="text-gray-600 mb-4">
+                                Divide your dataset into training, validation, and test sets to ensure unbiased evaluation of your model.
+                            </p>
+                            <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                                <h4 class="font-semibold mb-2">Typical Split Ratios:</h4>
+                                <div class="grid grid-cols-3 gap-4 text-center">
+                                    <div class="bg-blue-100 rounded p-3">
+                                        <div class="text-2xl font-bold text-blue-600">70%</div>
+                                        <div class="text-sm text-gray-600">Training</div>
+                                    </div>
+                                    <div class="bg-green-100 rounded p-3">
+                                        <div class="text-2xl font-bold text-green-600">15%</div>
+                                        <div class="text-sm text-gray-600">Validation</div>
+                                    </div>
+                                    <div class="bg-orange-100 rounded p-3">
+                                        <div class="text-2xl font-bold text-orange-600">15%</div>
+                                        <div class="text-sm text-gray-600">Test</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <button onclick="showCodeExample('data_split')" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition">
+                                    <i class="fas fa-code mr-2"></i>View Code
+                                </button>
+                                <button onclick="showSplitVisualization()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition">
+                                    <i class="fas fa-chart-pie mr-2"></i>Visualize Split
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step-card bg-white rounded-lg shadow-lg p-8 card-hover" data-step="3">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <span class="step-number text-4xl font-bold">03</span>
+                        </div>
+                        <div class="ml-6 flex-grow">
+                            <h3 class="text-2xl font-semibold mb-4">Model Selection</h3>
+                            <p class="text-gray-600 mb-4">
+                                Choose the appropriate algorithm based on your problem type, data characteristics, and requirements.
+                            </p>
+                            <div class="grid md:grid-cols-2 gap-4 mb-4">
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <h4 class="font-semibold mb-2">Classification</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1">
+                                        <li>• Logistic Regression</li>
+                                        <li>• Random Forest</li>
+                                        <li>• SVM</li>
+                                        <li>• Neural Networks</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <h4 class="font-semibold mb-2">Regression</h4>
+                                    <ul class="text-sm text-gray-600 space-y-1">
+                                        <li>• Linear Regression</li>
+                                        <li>• Decision Trees</li>
+                                        <li>• Gradient Boosting</li>
+                                        <li>• Neural Networks</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <button onclick="showCodeExample('model_selection')" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition">
+                                    <i class="fas fa-code mr-2"></i>View Code
+                                </button>
+                                <button onclick="showModelComparison()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition">
+                                    <i class="fas fa-balance-scale mr-2"></i>Compare Models
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="step-card bg-white rounded-lg shadow-lg p-8 card-hover" data-step="4">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <span class="step-number text-4xl font-bold">04</span>
+                        </div>
+                        <div class="ml-6 flex-grow">
+                            <h3 class="text-2xl font-semibold mb-4">Training Process</h3>
+                            <p class="text-gray-600 mb-4">
+                                The core step where the model learns patterns from the training data through iterative optimization.
+                            </p>
+                            <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                                <h4 class="font-semibold mb-2">Training Loop Components:</h4>
+                                <div class="space-y-2">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-forward text-purple-600 mr-3"></i>
+                                        <span class="text-gray-600">Forward Propagation</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-calculator text-purple-600 mr-3"></i>
+                                        <span class="text-gray-600">Loss Calculation</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-backward text-purple-600 mr-3"></i>
+                                        <span class="text-gray-600">Backward Propagation</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-sync text-purple-600 mr-3"></i>
+                                        <span class="text-gray-600">Weight Updates</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onclick="startTrainingDemo()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition">
+                                <i class="fas fa-play mr-2"></i>Start Training Demo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="step-card bg-white rounded-lg shadow-lg p-8 card-hover" data-step="5">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <span class="step-number text-4xl font-bold">05</span>
+                        </div>
+                        <div class="ml-6 flex-grow">
+                            <h3 class="text-2xl font-semibold mb-4">Hyperparameter Tuning</h3>
+                            <p class="text-gray-600 mb-4">
+                                Optimize model performance by finding the best combination of hyperparameters.
+                            </p>
+                            <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                                <h4 class="font-semibold mb-2">Common Hyperparameters:</h4>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="bg-white rounded p-2 text-sm">
+                                        <span class="font-semibold">Learning Rate:</span> 0.001 - 0.1
+                                    </div>
+                                    <div class="bg-white rounded p-2 text-sm">
+                                        <span class="font-semibold">Batch Size:</span> 32 - 256
+                                    </div>
+                                    <div class="bg-white rounded p-2 text-sm">
+                                        <span class="font-semibold">Epochs:</span> 10 - 1000
+                                    </div>
+                                    <div class="bg-white rounded p-2 text-sm">
+                                        <span class="font-semibold">Regularization:</span> L1/L2
+                                    </div>
+                                </div>
+                            </div>
+                            <button onclick="showHyperparameterDemo()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition">
+                                <i class="fas fa-sliders-h mr-2"></i>Tune Parameters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="step-card bg-white rounded-lg shadow-lg p-8 card-hover" data-step="6">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <span class="step-number text-4xl font-bold">06</span>
+                        </div>
+                        <div class="ml-6 flex-grow">
+                            <h3 class="text-2xl font-semibold mb-4">Model Evaluation</h3>
+                            <p class="text-gray-600 mb-4">
+                                Assess your model's performance using various metrics and the test set.
+                            </p>
+                            <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                                <h4 class="font-semibold mb-2">Evaluation Metrics:</h4>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-purple-600">95%</div>
+                                        <div class="text-sm text-gray-600">Accuracy</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-purple-600">0.92</div>
+                                        <div class="text-sm text-gray-600">Precision</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-purple-600">0.88</div>
+                                        <div class="text-sm text-gray-600">Recall</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-purple-600">0.90</div>
+                                        <div class="text-sm text-gray-600">F1-Score</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onclick="showEvaluationMetrics()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition">
+                                <i class="fas fa-chart-pie mr-2"></i>View Metrics
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 7 -->
+                <div class="step-card bg-white rounded-lg shadow-lg p-8 card-hover" data-step="7">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <span class="step-number text-4xl font-bold">07</span>
+                        </div>
+                        <div class="ml-6 flex-grow">
+                            <h3 class="text-2xl font-semibold mb-4">Deployment & Monitoring</h3>
+                            <p class="text-gray-600 mb-4">
+                                Deploy your trained model to production and continuously monitor its performance.
+                            </p>
+                            <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                                <h4 class="font-semibold mb-2">Deployment Options:</h4>
+                                <div class="space-y-2">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-cloud text-purple-600 mr-3"></i>
+                                        <span class="text-gray-600">Cloud Services (AWS, GCP, Azure)</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-server text-purple-600 mr-3"></i>
+                                        <span class="text-gray-600">On-Premise Deployment</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-mobile-alt text-purple-600 mr-3"></i>
+                                        <span class="text-gray-600">Edge Computing</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onclick="showDeploymentGuide()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition">
+                                <i class="fas fa-rocket mr-2"></i>Deployment Guide
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Demo Section -->
+    <section id="demo" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12">Interactive Training Demo</h2>
+            
+            <div class="max-w-4xl mx-auto">
+                <!-- Demo Controls -->
+                <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Training Parameters</h3>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Learning Rate</label>
+                            <input type="range" id="learningRate" min="0.001" max="0.1" step="0.001" value="0.01" class="w-full">
+                            <span id="lrValue" class="text-sm text-gray-600">0.01</span>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Batch Size</label>
+                            <select id="batchSize" class="w-full px-3 py-2 border rounded-lg">
+                                <option value="16">16</option>
+                                <option value="32" selected>32</option>
+                                <option value="64">64</option>
+                                <option value="128">128</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Epochs</label>
+                            <input type="number" id="epochs" min="1" max="100" value="10" class="w-full px-3 py-2 border rounded-lg">
+                        </div>
+                    </div>
+                    <div class="flex space-x-4 mt-4">
+                        <button onclick="runTrainingSimulation()" class="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition">
+                            <i class="fas fa-play mr-2"></i>Start Training
+                        </button>
+                        <button onclick="resetTraining()" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition">
+                            <i class="fas fa-redo mr-2"></i>Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Training Visualization -->
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-xl font-semibold mb-4">Training Progress</h3>
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-sm font-medium">Loss</span>
+                            <span id="currentLoss" class="text-sm font-medium">0.000</span>
+                        </div>
+                        <div class="bg-gray-200 rounded-full h-4 overflow-hidden">
+                            <div id="lossBar" class="bg-red-500 h-full transition-all duration-300" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-sm font-medium">Accuracy</span>
+                            <span id="currentAccuracy" class="text-sm font-medium">0%</span>
+                        </div>
+                        <div class="bg-gray-200 rounded-full h-4 overflow-hidden">
+                            <div id="accuracyBar" class="bg-green-500 h-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                        <div class="bg-white rounded-lg p-4">
+                            <h4 class="font-semibold mb-2">Loss Curve</h4>
+                            <canvas id="lossChart" width="400" height="200"></canvas>
+                        </div>
+                        <div class="bg-white rounded-lg p-4">
+                            <h4 class="font-semibold mb-2">Accuracy Curve</h4>
+                            <canvas id="accuracyChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <h4 class="font-semibold mb-2">Training Log</h4>
+                        <div id="trainingLog" class="bg-gray-800 text-green-400 p-4 rounded-lg font-mono text-sm h-32 overflow-y-auto">
+                            > Welcome to ML Training Simulator<br>
+                            > Adjust parameters and click Start Training<br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section id="quiz" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12">Test Your Knowledge</h2>
+            
+            <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-8">
+                <div id="quizContainer">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-4" id="questionText">Loading question...</h3>
+                        <div id="answersContainer" class="space-y-3">
+                            <!-- Answers will be inserted here -->
+                        </div>
+                    </div>
+                    <div class="flex justify-between">
+                        <button id="prevBtn" onclick="prevQuestion()" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 transition hidden">
+                            Previous
+                        </button>
+                        <button id="nextBtn" onclick="nextQuestion()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition ml-auto">
+                            Next Question
+                        </button>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <span id="quizProgress" class="text-gray-600">Question 1 of 5</span>
+                    </div>
+                </div>
+                <div id="quizResults" class="hidden text-center">
+                    <h3 class="text-2xl font-semibold mb-4">Quiz Results</h3>
+                    <div class="text-5xl font-bold text-purple-600 mb-4" id="scoreDisplay">0%</div>
+                    <p class="text-gray-600 mb-6" id="resultMessage">Great job!</p>
+                    <button onclick="restartQuiz()" class="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition">
+                        Restart Quiz
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section id="resources" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12">Learning Resources</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 rounded-lg shadow-lg p-6 card-hover">
+                    <div class="text-purple-600 text-3xl mb-4">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Documentation</h3>
+                    <ul class="space-y-2 text-gray-600">
+                        <li><a href="#" class="hover:text-purple-600" onclick="downloadResource('tensorflow_guide.pdf')">TensorFlow Guide</a></li>
+                        <li><a href="#" class="hover:text-purple-600" onclick="downloadResource('pytorch_tutorial.pdf')">PyTorch Tutorials</a></li>
+                        <li><a href="#" class="hover:text-purple-600" onclick="downloadResource('scikit_learn_docs.pdf')">Scikit-learn Docs</a></li>
+                        <li><a href="#" class="hover:text-purple-600" onclick="downloadResource('keras_examples.pdf')">Keras Examples</a></li>
+                    </ul>
+                    <button onclick="downloadAllDocs()" class="mt-4 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition w-full">
+                        <i class="fas fa-download mr-2"></i>Download All
+                    </button>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg shadow-lg p-6 card-hover">
+                    <div class="text-purple-600 text-3xl mb-4">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Video Courses</h3>
+                    <ul class="space-y-2 text-gray-600">
+                        <li><a href="https://www.coursera.org/learn/machine-learning" target="_blank" class="hover:text-purple-600">Andrew Ng's ML Course</a></li>
+                        <li><a href="https://course.fast.ai/" target="_blank" class="hover:text-purple-600">Fast.ai Practical DL</a></li>
+                        <li><a href="http://cs231n.stanford.edu/" target="_blank" class="hover:text-purple-600">CS231n Stanford</a></li>
+                        <li><a href="https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-034-artificial-intelligence-fall-2010/" target="_blank" class="hover:text-purple-600">MIT 6.034</a></li>
+                    </ul>
+                    <button onclick="showPlaylist()" class="mt-4 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition w-full">
+                        <i class="fas fa-list mr-2"></i>View Playlist
+                    </button>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg shadow-lg p-6 card-hover">
+                    <div class="text-purple-600 text-3xl mb-4">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Code Examples</h3>
+                    <ul class="space-y-2 text-gray-600">
+                        <li><a href="https://github.com/topics/machine-learning" target="_blank" class="hover:text-purple-600">GitHub Repositories</a></li>
+                        <li><a href="https://www.kaggle.com/code" target="_blank" class="hover:text-purple-600">Kaggle Notebooks</a></li>
+                        <li><a href="https://colab.research.google.com/notebooks/welcome.ipynb" target="_blank" class="hover:text-purple-600">Colab Examples</a></li>
+                        <li><a href="#" class="hover:text-purple-600" onclick="downloadResource('sample_projects.zip')">Sample Projects</a></li>
+                    </ul>
+                    <button onclick="downloadAllCode()" class="mt-4 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition w-full">
+                        <i class="fas fa-download mr-2"></i>Download All
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Exercises Section -->
+    <section id="exercises" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12">Hands-On Exercises</h2>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+                    <h3 class="text-2xl font-semibold mb-4">Exercise 1: Data Preprocessing</h3>
+                    <p class="text-gray-600 mb-4">
+                        In this exercise, you'll practice preprocessing a dataset by handling missing values, scaling features, and encoding categorical variables.
+                    </p>
+                    <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                        <h4 class="font-semibold mb-2">Dataset Information:</h4>
+                        <p class="text-gray-600">
+                            We'll use a sample dataset containing customer information with missing values and mixed data types.
+                        </p>
+                    </div>
+                    <div class="flex space-x-4">
+                        <button onclick="showExercise('exercise1')" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition">
+                            <i class="fas fa-laptop-code mr-2"></i>Start Exercise
+                        </button>
+                        <button onclick="downloadResource('exercise1_solution.ipynb')" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
+                            <i class="fas fa-download mr-2"></i>Solution
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <h3 class="text-2xl font-semibold mb-4">Exercise 2: Model Training</h3>
+                    <p class="text-gray-600 mb-4">
+                        Build and train a classification model on a real dataset. Experiment with different algorithms and hyperparameters.
+                    </p>
+                    <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                        <h4 class="font-semibold mb-2">Skills Practiced:</h4>
+                        <ul class="list-disc list-inside text-gray-600">
+                            <li>Model selection and training</li>
+                            <li>Hyperparameter tuning</li>
+                            <li>Evaluation metrics calculation</li>
+                            <li>Cross-validation techniques</li>
+                        </ul>
+                    </div>
+                    <div class="flex space-x-4">
+                        <button onclick="showExercise('exercise2')" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition">
+                            <i class="fas fa-laptop-code mr-2"></i>Start Exercise
+                        </button>
+                        <button onclick="downloadResource('exercise2_solution.ipynb')" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
+                            <i class="fas fa-download mr-2"></i>Solution
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <i class="fas fa-brain text-purple-400 text-2xl"></i>
+                        <span class="text-xl font-bold">नमस्ते - ML Training Journey</span>
+                    </div>
+                    <p class="text-gray-400">Making machine learning accessible to everyone</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="https://github.com/yourusername" target="_blank" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/yourusername" target="_blank" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-linkedin text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-youtube text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
+                <p>&copy; 2024 ML Training Journey. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal for Code Examples -->
+    <div id="codeModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg max-w-3xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold">Code Example</h3>
+                    <button onclick="closeCodeModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div id="codeContent" class="code-block p-4">
+                    <!-- Code will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Visualizations -->
+    <div id="vizModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] flex flex-col">
+            <div class="p-6 border-b">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xl font-semibold" id="vizTitle">Visualization</h3>
+                    <button onclick="closeVizModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="vizContent" class="p-4 overflow-y-auto flex-grow">
+                <!-- Visualization will be inserted here -->
+            </div>
+            <div class="p-4 border-t bg-gray-50">
+                <div class="flex justify-end">
+                    <button onclick="closeVizModal()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">
+                        <i class="fas fa-times mr-2"></i>Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script>
+        // Initialize progress tracking
+        let currentStep = 0;
+        const totalSteps = 7;
+        
+        // Chart instances
+        let lossChart, accuracyChart;
+        
+        // Quiz variables
+        let currentQuestion = 0;
+        let score = 0;
+        let quizAnswers = [];
+        
+        // Quiz questions
+        const quizQuestions = [
+            {
+                question: "Which of the following is NOT a step in the ML training pipeline?",
+                answers: [
+                    "Data Collection",
+                    "Model Training",
+                    "Database Design",
+                    "Model Evaluation"
+                ],
+                correct: 2
+            },
+            {
+                question: "What is the typical purpose of a validation set?",
+                answers: [
+                    "To train the model",
+                    "To tune hyperparameters",
+                    "To collect more data",
+                    "To deploy the model"
+                ],
+                correct: 1
+            },
+            {
+                question: "What does 'overfitting' mean in ML?",
+                answers: [
+                    "Model performs poorly on training data",
+                    "Model performs well on training data but poorly on new data",
+                    "Model takes too long to train",
+                    "Model uses too few features"
+                ],
+                correct: 1
+            },
+            {
+                question: "Which metric is most appropriate for imbalanced classification problems?",
+                answers: [
+                    "Accuracy",
+                    "Precision",
+                    "F1-Score",
+                    "Mean Squared Error"
+                ],
+                correct: 2
+            },
+            {
+                question: "What is the primary purpose of cross-validation?",
+                answers: [
+                    "Speed up training",
+                    "Reduce memory usage",
+                    "Assess model generalization",
+                    "Increase dataset size"
+                ],
+                correct: 2
+            }
+        ];
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+            initCharts();
+            initQuiz();
+            loadDarkModePreference();
+        });
+
+        // Update progress bar on scroll
+        function updateProgress() {
+            const stepCards = document.querySelectorAll('.step-card');
+            const scrollPosition = window.scrollY + window.innerHeight / 2;
+            
+            stepCards.forEach((card, index) => {
+                const cardTop = card.offsetTop;
+                const cardBottom = cardTop + card.offsetHeight;
+                
+                if (scrollPosition >= cardTop && scrollPosition <= cardBottom) {
+                    currentStep = index + 1;
+                    updateProgressBar();
+                }
+            });
+        }
+
+        function updateProgressBar() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressText').textContent = Math.round(progress) + '%';
+        }
+
+        window.addEventListener('scroll', updateProgress);
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Smooth scroll to section
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Dark mode toggle
+        document.getElementById('darkModeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            const icon = this.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
+
+        function loadDarkModePreference() {
+            const darkMode = localStorage.getItem('darkMode');
+            if (darkMode === 'enabled') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkModeToggle').querySelector('i').classList.remove('fa-moon');
+                document.getElementById('darkModeToggle').querySelector('i').classList.add('fa-sun');
+            }
+        }
+
+        // Code examples
+        const codeExamples = {
+            data_prep: `# Data Preparation Example
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+
+# Load data
+df = pd.read_csv('data.csv')
+
+# Handle missing values
+df.fillna(df.mean(), inplace=True)
+
+# Feature engineering
+df['new_feature'] = df['feature1'] * df['feature2']
+
+# Normalize features
+scaler = StandardScaler()
+scaled_features = scaler.fit_transform(df[['feature1', 'feature2']])`,
+
+            data_split: `# Data Splitting Example
+from sklearn.model_selection import train_test_split
+
+# Split data into train and test
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Further split training data for validation
+X_train, X_val, y_train, y_val = train_test_split(
+    X_train, y_train, test_size=0.25, random_state=42
+)
+
+print(f"Training set: {len(X_train)} samples")
+print(f"Validation set: {len(X_val)} samples")
+print(f"Test set: {len(X_test)} samples")`,
+
+            model_selection: `# Model Selection Example
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+
+# Initialize models
+models = {
+    'Random Forest': RandomForestClassifier(n_estimators=100),
+    'Logistic Regression': LogisticRegression(),
+    'SVM': SVC(kernel='rbf')
+}
+
+# Train and evaluate each model
+for name, model in models.items():
+    model.fit(X_train, y_train)
+    score = model.score(X_val, y_val)
+    print(f"{name}: {score:.4f}")`
+        };
+
+        function showCodeExample(type) {
+            const modal = document.getElementById('codeModal');
+            const content = document.getElementById('codeContent');
+            content.innerHTML = '<pre><code class="language-python">' + codeExamples[type] + '</code></pre>';
+            modal.classList.remove('hidden');
+            Prism.highlightAll();
+        }
+
+        function closeCodeModal() {
+            document.getElementById('codeModal').classList.add('hidden');
+        }
+
+        // Visualization functions
+        function showVisualization(type) {
+            const modal = document.getElementById('vizModal');
+            const title = document.getElementById('vizTitle');
+            const content = document.getElementById('vizContent');
+            
+            title.textContent = "Data Visualization";
+            content.innerHTML = 
+                '<div class="bg-gray-100 p-4 rounded-lg">' +
+                    '<h4 class="font-semibold mb-2">Sample Dataset Distribution</h4>' +
+                    '<canvas id="dataVizChart" width="400" height="200"></canvas>' +
+                '</div>' +
+                '<div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">' +
+                    '<div class="bg-blue-50 p-4 rounded-lg">' +
+                        '<h5 class="font-semibold mb-2">Feature Correlations</h5>' +
+                        '<div class="grid grid-cols-3 gap-2">';
+            
+            // Generate correlation cells
+            for (let i = 0; i < 9; i++) {
+                content.innerHTML += '<div class="bg-white p-2 text-center rounded">' + (Math.random() * 2 - 1).toFixed(2) + '</div>';
+            }
+            
+            content.innerHTML += 
+                        '</div>' +
+                    '</div>' +
+                    '<div class="bg-green-50 p-4 rounded-lg">' +
+                        '<h5 class="font-semibold mb-2">Class Distribution</h5>' +
+                        '<div class="space-y-2">' +
+                            '<div>' +
+                                '<div class="flex justify-between">' +
+                                    '<span>Class A</span>' +
+                                    '<span>42%</span>' +
+                                '</div>' +
+                                '<div class="bg-gray-200 rounded-full h-2">' +
+                                    '<div class="bg-blue-500 h-2 rounded-full" style="width: 42%"></div>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div>' +
+                                '<div class="flex justify-between">' +
+                                    '<span>Class B</span>' +
+                                    '<span>33%</span>' +
+                                '</div>' +
+                                '<div class="bg-gray-200 rounded-full h-2">' +
+                                    '<div class="bg-green-500 h-2 rounded-full" style="width: 33%"></div>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div>' +
+                                '<div class="flex justify-between">' +
+                                    '<span>Class C</span>' +
+                                    '<span>25%</span>' +
+                                '</div>' +
+                                '<div class="bg-gray-200 rounded-full h-2">' +
+                                    '<div class="bg-purple-500 h-2 rounded-full" style="width: 25%"></div>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            modal.classList.remove('hidden');
+            
+            // Create a simple bar chart
+            setTimeout(() => {
+                const ctx = document.getElementById('dataVizChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4', 'Feature 5'],
+                        datasets: [{
+                            label: 'Average Values',
+                            data: [12, 19, 8, 15, 10],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }, 100);
+        }
+
+        function showSplitVisualization() {
+            const modal = document.getElementById('vizModal');
+            const title = document.getElementById('vizTitle');
+            const content = document.getElementById('vizContent');
+            
+            title.textContent = "Data Split Visualization";
+            content.innerHTML = 
+                '<div class="text-center">' +
+                    '<div class="inline-block relative w-48 h-48 mx-auto">' +
+                        '<div class="absolute inset-0 rounded-full border-4 border-blue-500"></div>' +
+                        '<div class="absolute inset-4 rounded-full border-4 border-green-500"></div>' +
+                        '<div class="absolute inset-8 rounded-full border-4 border-orange-500"></div>' +
+                        
+                        '<div class="absolute inset-0 flex items-center justify-center">' +
+                            '<div class="text-center">' +
+                                '<div class="text-xl font-bold">100%</div>' +
+                                '<div class="text-xs">Total Dataset</div>' +
+                            '</div>' +
+                        '</div>' +
+                        
+                        '<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24">' +
+                            '<div class="absolute inset-0 rounded-full border-2 border-blue-500 animate-pulse"></div>' +
+                        '</div>' +
+                        
+                        '<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16">' +
+                            '<div class="absolute inset-0 rounded-full border-2 border-green-500 animate-pulse"></div>' +
+                        '</div>' +
+                    '</div>' +
+                    
+                    '<div class="grid grid-cols-3 gap-2 mt-6 max-w-md mx-auto">' +
+                        '<div class="bg-blue-100 p-2 rounded-lg">' +
+                            '<div class="text-lg font-bold text-blue-600">70%</div>' +
+                            '<div class="text-xs">Training</div>' +
+                        '</div>' +
+                        '<div class="bg-green-100 p-2 rounded-lg">' +
+                            '<div class="text-lg font-bold text-green-600">15%</div>' +
+                            '<div class="text-xs">Validation</div>' +
+                        '</div>' +
+                        '<div class="bg-orange-100 p-2 rounded-lg">' +
+                            '<div class="text-lg font-bold text-orange-600">15%</div>' +
+                            '<div class="text-xs">Test</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            modal.classList.remove('hidden');
+        }
+
+        function closeVizModal() {
+            document.getElementById('vizModal').classList.add('hidden');
+            // Clear the content when closing to free up resources
+            document.getElementById('vizContent').innerHTML = '';
+        }
+
+        // Training simulation
+        let trainingInterval;
+        let epoch = 0;
+        let lossHistory = [];
+        let accuracyHistory = [];
+
+        function initCharts() {
+            const lossCtx = document.getElementById('lossChart').getContext('2d');
+            const accCtx = document.getElementById('accuracyChart').getContext('2d');
+            
+            lossChart = new Chart(lossCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Loss',
+                        data: [],
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            
+            accuracyChart = new Chart(accCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Accuracy',
+                        data: [],
+                        borderColor: 'rgb(54, 162, 235)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 1
+                        }
+                    }
+                }
+            });
+        }
+
+        function runTrainingSimulation() {
+            const epochs = parseInt(document.getElementById('epochs').value);
+            const learningRate = parseFloat(document.getElementById('learningRate').value);
+            
+            // Reset
+            epoch = 0;
+            lossHistory = [];
+            accuracyHistory = [];
+            lossChart.data.labels = [];
+            lossChart.data.datasets[0].data = [];
+            accuracyChart.data.labels = [];
+            accuracyChart.data.datasets[0].data = [];
+            lossChart.update();
+            accuracyChart.update();
+            
+            // Clear log
+            const logElement = document.getElementById('trainingLog');
+            logElement.innerHTML = '> Starting training simulation...<br>';
+            
+            // Clear previous interval
+            if (trainingInterval) {
+                clearInterval(trainingInterval);
+            }
+            
+            // Start training simulation
+            trainingInterval = setInterval(() => {
+                if (epoch >= epochs) {
+                    clearInterval(trainingInterval);
+                    showTrainingComplete();
+                    addToLog('> Training completed!');
+                    return;
+                }
+                
+                epoch++;
+                
+                // Simulate loss decrease
+                const loss = Math.max(0.01, 2.0 * Math.exp(-epoch * learningRate * 10) + Math.random() * 0.1);
+                lossHistory.push(loss);
+                
+                // Simulate accuracy increase
+                const accuracy = Math.min(0.99, 0.5 + (1 - Math.exp(-epoch * learningRate * 5)) + Math.random() * 0.05);
+                accuracyHistory.push(accuracy);
+                
+                // Update UI
+                document.getElementById('currentLoss').textContent = loss.toFixed(3);
+                document.getElementById('currentAccuracy').textContent = (accuracy * 100).toFixed(1) + '%';
+                document.getElementById('lossBar').style.width = (loss * 50) + '%';
+                document.getElementById('accuracyBar').style.width = (accuracy * 100) + '%';
+                
+                // Update charts
+                updateCharts(epoch, loss, accuracy);
+                
+                // Update log
+                addToLog('> Epoch ' + epoch + ': Loss=' + loss.toFixed(4) + ', Accuracy=' + (accuracy * 100).toFixed(2) + '%');
+                
+            }, 500);
+        }
+
+        function resetTraining() {
+            if (trainingInterval) {
+                clearInterval(trainingInterval);
+            }
+            
+            epoch = 0;
+            lossHistory = [];
+            accuracyHistory = [];
+            
+            document.getElementById('currentLoss').textContent = '0.000';
+            document.getElementById('currentAccuracy').textContent = '0%';
+            document.getElementById('lossBar').style.width = '100%';
+            document.getElementById('accuracyBar').style.width = '0%';
+            
+            lossChart.data.labels = [];
+            lossChart.data.datasets[0].data = [];
+            accuracyChart.data.labels = [];
+            accuracyChart.data.datasets[0].data = [];
+            lossChart.update();
+            accuracyChart.update();
+            
+            document.getElementById('trainingLog').innerHTML = '> Training simulation reset<br>> Adjust parameters and click Start Training<br>';
+        }
+
+        function updateCharts(epoch, loss, accuracy) {
+            // Update loss chart
+            lossChart.data.labels.push(epoch);
+            lossChart.data.datasets[0].data.push(loss);
+            lossChart.update();
+            
+            // Update accuracy chart
+            accuracyChart.data.labels.push(epoch);
+            accuracyChart.data.datasets[0].data.push(accuracy);
+            accuracyChart.update();
+        }
+
+        function addToLog(message) {
+            const logElement = document.getElementById('trainingLog');
+            logElement.innerHTML += message + '<br>';
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        function showTrainingComplete() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center';
+            modal.innerHTML = 
+                '<div class="bg-white rounded-lg p-8 max-w-md">' +
+                    '<div class="text-center">' +
+                        '<i class="fas fa-check-circle text-green-500 text-5xl mb-4"></i>' +
+                        '<h3 class="text-2xl font-bold mb-2">Training Complete!</h3>' +
+                        '<p class="text-gray-600 mb-4">Your model has been successfully trained.</p>' +
+                        '<div class="bg-gray-100 rounded-lg p-4 mb-4">' +
+                            '<div class="flex justify-between mb-2">' +
+                                '<span>Final Loss:</span>' +
+                                '<span class="font-semibold">' + lossHistory[lossHistory.length-1].toFixed(4) + '</span>' +
+                            '</div>' +
+                            '<div class="flex justify-between">' +
+                                '<span>Final Accuracy:</span>' +
+                                '<span class="font-semibold">' + (accuracyHistory[accuracyHistory.length-1] * 100).toFixed(2) + '%</span>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="flex justify-center space-x-4">' +
+                            '<button onclick="this.parentElement.parentElement.parentElement.remove()" ' +
+                                    'class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700">' +
+                                'Close' +
+                            '</button>' +
+                            '<button onclick="this.parentElement.parentElement.parentElement.remove(); scrollToSection(\'steps\');" ' +
+                                    'class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700">' +
+                                '<i class="fas fa-arrow-left mr-2"></i>Go Back to Steps' +
+                            '</button>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            document.body.appendChild(modal);
+        }
+
+        // Update learning rate display
+        document.getElementById('learningRate').addEventListener('input', function(e) {
+            document.getElementById('lrValue').textContent = e.target.value;
+        });
+
+        // Additional interactive functions
+        function startTrainingDemo() {
+            scrollToSection('demo');
+            setTimeout(() => runTrainingSimulation(), 500);
+        }
+
+        function showHyperparameterDemo() {
+            alert('In a full implementation, this would show an interactive parameter tuning interface with visualizations of how different hyperparameters affect model performance.');
+        }
+
+        function showEvaluationMetrics() {
+            alert('In a full implementation, this would show detailed metrics dashboard with confusion matrix, ROC curves, precision-recall curves, and other evaluation visualizations.');
+        }
+
+        function showDeploymentGuide() {
+            alert('In a full implementation, this would show step-by-step deployment instructions for different platforms like cloud services, edge devices, and APIs.');
+        }
+
+        function showModelComparison() {
+            const modal = document.getElementById('vizModal');
+            const title = document.getElementById('vizTitle');
+            const content = document.getElementById('vizContent');
+            
+            title.textContent = "Model Comparison";
+            content.innerHTML = 
+                '<div class="overflow-x-auto">' +
+                    '<table class="min-w-full bg-white text-sm">' +
+                        '<thead>' +
+                            '<tr>' +
+                                '<th class="py-1 px-2 bg-gray-100 border-b text-left">Model</th>' +
+                                '<th class="py-1 px-2 bg-gray-100 border-b text-right">Accuracy</th>' +
+                                '<th class="py-1 px-2 bg-gray-100 border-b text-right">F1-Score</th>' +
+                                '<th class="py-1 px-2 bg-gray-100 border-b text-right">Time</th>' +
+                            '</tr>' +
+                        '</thead>' +
+                        '<tbody>' +
+                            '<tr>' +
+                                '<td class="py-1 px-2 border-b">Logistic Regression</td>' +
+                                '<td class="py-1 px-2 border-b text-right">0.85</td>' +
+                                '<td class="py-1 px-2 border-b text-right">0.85</td>' +
+                                '<td class="py-1 px-2 border-b text-right">2.3s</td>' +
+                            '</tr>' +
+                            '<tr class="bg-blue-50">' +
+                                '<td class="py-1 px-2 border-b font-semibold">Random Forest</td>' +
+                                '<td class="py-1 px-2 border-b font-semibold text-right">0.92</td>' +
+                                '<td class="py-1 px-2 border-b font-semibold text-right">0.92</td>' +
+                                '<td class="py-1 px-2 border-b text-right">15.7s</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td class="py-1 px-2 border-b">SVM</td>' +
+                                '<td class="py-1 px-2 border-b text-right">0.89</td>' +
+                                '<td class="py-1 px-2 border-b text-right">0.89</td>' +
+                                '<td class="py-1 px-2 border-b text-right">8.4s</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td class="py-1 px-2 border-b">Neural Network</td>' +
+                                '<td class="py-1 px-2 border-b text-right">0.94</td>' +
+                                '<td class="py-1 px-2 border-b text-right">0.94</td>' +
+                                '<td class="py-1 px-2 border-b text-right">42.1s</td>' +
+                            '</tr>' +
+                        '</tbody>' +
+                    '</table>' +
+                '</div>' +
+                '<div class="mt-4">' +
+                    '<h4 class="font-semibold mb-2 text-sm">Performance Comparison</h4>' +
+                    '<canvas id="modelComparisonChart" width="400" height="150"></canvas>' +
+                '</div>';
+            modal.classList.remove('hidden');
+            
+            // Create comparison chart
+            setTimeout(() => {
+                const ctx = document.getElementById('modelComparisonChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Logistic Regression', 'Random Forest', 'SVM', 'Neural Network'],
+                        datasets: [
+                            {
+                                label: 'Accuracy',
+                                data: [0.85, 0.92, 0.89, 0.94],
+                                backgroundColor: 'rgba(54, 162, 235, 0.5)'
+                            },
+                            {
+                                label: 'F1-Score',
+                                data: [0.85, 0.92, 0.89, 0.94],
+                                backgroundColor: 'rgba(255, 99, 132, 0.5)'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 1
+                            }
+                        }
+                    }
+                });
+            }, 100);
+        }
+
+        // Resource functions
+        function downloadResource(filename) {
+            alert('In a full implementation, this would download: ' + filename + '\n\nThis is a demonstration of the download functionality.');
+        }
+
+        function downloadAllDocs() {
+            alert("In a full implementation, this would download a zip file containing all documentation resources.");
+        }
+
+        function downloadAllCode() {
+            alert("In a full implementation, this would download a zip file containing all code examples and sample projects.");
+        }
+
+        function showPlaylist() {
+            alert("In a full implementation, this would open a modal with an embedded video playlist of machine learning courses.");
+        }
+
+        // Exercise functions
+        function showExercise(exerciseId) {
+            alert('In a full implementation, this would open an interactive coding environment for ' + exerciseId + ' where users can write and execute Python code directly in the browser.');
+        }
+
+        // Quiz functions
+        function initQuiz() {
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const question = quizQuestions[currentQuestion];
+            document.getElementById('questionText').textContent = question.question;
+            
+            const answersContainer = document.getElementById('answersContainer');
+            answersContainer.innerHTML = '';
+            
+            question.answers.forEach((answer, index) => {
+                const answerElement = document.createElement('div');
+                answerElement.className = 'p-3 border rounded-lg cursor-pointer hover:bg-purple-50 transition';
+                answerElement.innerHTML = 
+                    '<label class="flex items-center">' +
+                        '<input type="radio" name="quizAnswer" value="' + index + '" class="mr-3">' +
+                        answer +
+                    '</label>';
+                answerElement.addEventListener('click', () => selectAnswer(index));
+                answersContainer.appendChild(answerElement);
+            });
+            
+            document.getElementById('quizProgress').textContent = 'Question ' + (currentQuestion + 1) + ' of ' + quizQuestions.length;
+            
+            document.getElementById('prevBtn').classList.toggle('hidden', currentQuestion === 0);
+            document.getElementById('nextBtn').textContent = currentQuestion === quizQuestions.length - 1 ? 'Finish Quiz' : 'Next Question';
+        }
+
+        function selectAnswer(index) {
+            quizAnswers[currentQuestion] = index;
+            
+            // Highlight selected answer
+            document.querySelectorAll('#answersContainer div').forEach((el, i) => {
+                if (i === index) {
+                    el.classList.add('ring-2', 'ring-purple-500', 'bg-purple-50');
+                } else {
+                    el.classList.remove('ring-2', 'ring-purple-500', 'bg-purple-50');
+                }
+            });
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < quizQuestions.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        function finishQuiz() {
+            // Calculate score
+            score = 0;
+            quizAnswers.forEach((answer, index) => {
+                if (answer === quizQuestions[index].correct) {
+                    score++;
+                }
+            });
+            
+            const percentage = Math.round((score / quizQuestions.length) * 100);
+            
+            // Show results
+            document.getElementById('quizContainer').classList.add('hidden');
+            document.getElementById('quizResults').classList.remove('hidden');
+            document.getElementById('scoreDisplay').textContent = percentage + '%';
+            
+            // Show appropriate message
+            let message = "";
+            if (percentage >= 80) {
+                message = "Excellent! You have a strong understanding of ML concepts.";
+            } else if (percentage >= 60) {
+                message = "Good job! You understand the basics, but review the material to improve.";
+            } else {
+                message = "Keep studying! Review the material and try the quiz again.";
+            }
+            document.getElementById('resultMessage').textContent = message;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            quizAnswers = [];
+            score = 0;
+            document.getElementById('quizResults').classList.add('hidden');
+            document.getElementById('quizContainer').classList.remove('hidden');
+            renderQuestion();
+        }
+    </script>
+</body>
+</html>
